@@ -1,0 +1,76 @@
+from pathlib import Path
+
+import ffmpeg
+
+from config import OUTPUT_DIR
+
+
+class VideoProcessor:
+    """Add subtitles to video with ffmpeg"""
+
+    @staticmethod
+    def add_subtitles(video_path: str,
+                      subtitle_paths: dict,
+                      output_name: str = None) -> str:
+        """
+        Add subtitles to video (soft-sub)
+
+        Args:
+            video_path: path to the original video
+            subtitle_paths: dictionary {'en': 'path/to/en.srt', 'fa': 'path/to/fa.srt'}
+            output_name: output file name
+
+        Returns:
+            video path with subtitles
+        """
+        if output_name is None:
+            output_name = f"{Path(video_path).stem}_subtitled.mkv"
+
+        output_path = OUTPUT_DIR / "videos" / output_name
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        try:
+            # Original video and audio
+            video = ffmpeg.input(video_path)
+
+            # Add subtitles
+            subtitle_inputs = []
+            metadata = []
+
+            for i, (lang, sub_path) in enumerate(subtitle_paths.items()):
+                subtitle_inputs.append(ffmpeg.input(sub_path))
+                metadata.extend([
+                    f'-metadata:s:s:{i}',
+                    f'language={lang}',
+                    f'-metadata:s:s:{i}',
+                    f'title={lang.upper()}'
+                ])
+
+            # Combine all
+            inputs = [video] + subtitle_inputs
+
+            output_args = {
+                'c:v': 'copy',  # Copy video without re-encoding
+                'c:a': 'copy',  # Copy audio without re-encoding
+                'c:s': 'srt'  # Subtitle format
+            }
+
+            stream = ffmpeg.output(
+                *inputs,
+                str(output_path),
+                **output_args
+            )
+
+            # Execute command
+            ffmpeg.run(
+                stream,
+                overwrite_output=True,
+                capture_stderr=True
+            )
+
+            print(f"Video created with subtitles: {output_path}")
+            return str(output_path)
+
+        except ffmpeg.Error as e:
+            error_message = e.stderr.decode() if e.stderr else str(e)
+            raise RuntimeError(f"Error adding subtitle: {error_message}")
