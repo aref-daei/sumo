@@ -52,7 +52,7 @@ class MainWindow(ctk.CTk):
 
         # File selection frame
         file_frame = ctk.CTkFrame(self)
-        file_frame.pack(pady=20, padx=40, fill="x")
+        file_frame.pack(pady=20, padx=30, fill="x")
 
         self.file_label = ctk.CTkLabel(
             file_frame,
@@ -72,7 +72,7 @@ class MainWindow(ctk.CTk):
 
         # Settings
         settings_frame = ctk.CTkFrame(self)
-        settings_frame.pack(pady=20, padx=40, fill="both", expand=True)
+        settings_frame.pack(pady=20, padx=30, fill="both", expand=True)
 
         settings_label = ctk.CTkLabel(
             settings_frame,
