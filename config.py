@@ -1,6 +1,11 @@
 from pathlib import Path
 
-# Project Paths
+# Project name
+PROJECT_NAME = "SUMO.AI"
+PROJECT_LICENSE = "(c) 2025 Aref Daei - MIT License"
+PROJECT_VERSION = "1.0.0"
+
+# Project paths
 BASE_DIR = Path()
 TEMP_DIR = BASE_DIR / "temp"
 OUTPUT_DIR = BASE_DIR / "output"
