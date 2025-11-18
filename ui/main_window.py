@@ -4,7 +4,7 @@ from tkinter import filedialog, messagebox
 
 import customtkinter as ctk
 
-from config import OUTPUT_DIR
+from config import PROJECT_NAME, OUTPUT_DIR
 from core.audio_extractor import AudioExtractor
 from core.subtitle_generator import SubtitleGenerator
 from core.transcriber import Transcriber
@@ -19,7 +19,7 @@ class MainWindow(ctk.CTk):
         super().__init__()
 
         # Window settings
-        self.title("SUMO.AI")
+        self.title(f"{PROJECT_NAME}")
         self.geometry("360x640")
 
         # Theme
@@ -45,7 +45,7 @@ class MainWindow(ctk.CTk):
         # Title
         title_label = ctk.CTkLabel(
             self,
-            text="SUMO.AI",
+            text=f"{PROJECT_NAME}",
             font=ctk.CTkFont(size=24, weight="bold")
         )
         title_label.pack(pady=20)
@@ -189,7 +189,7 @@ class MainWindow(ctk.CTk):
         self.progress_bar.set(progress)
 
         progress_percent = int(progress * 100)
-        self.title(f"SUMO.AI - {progress_percent}%")
+        self.title(f"{PROJECT_NAME} - {progress_percent}%")
 
     def start_processing(self):
         """Start processing in a separate thread"""
@@ -292,7 +292,7 @@ class MainWindow(ctk.CTk):
 
         except Exception as e:
             self.update_status(f"Error: Close the app then open it again", 0.0)
-            self.title("SUMO.AI - Error")
+            self.title(f"{PROJECT_NAME} - Error")
             self.after(100, self._show_error, e)
 
         finally:
