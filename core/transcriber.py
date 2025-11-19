@@ -2,7 +2,8 @@ from typing import List, Dict
 
 import whisper
 
-from settings import WHISPER_MODEL, WHISPER_DEVICE
+from settings import WHISPER_MODEL, WHISPER_DEVICE, WHISPER_LANGUAGE
+from exceptions.transcriber_exc import *
 
 
 class Transcriber:
@@ -12,7 +13,6 @@ class Transcriber:
         self.model_name = model_name
         self.device = device
         self.model = None
-        print(f"Loading Whisper model ({model_name})...")
 
     def load_model(self):
         """Loading the Whisper model"""
@@ -21,45 +21,27 @@ class Transcriber:
                 self.model_name,
                 device=self.device
             )
-            print(f"Model {self.model_name} loaded")
 
-    def transcribe(self, audio_path: str, language: str = "en") -> Dict:
-        """
-        Convert voice to text
+    def transcribe(self, audio_path: str, language: str = WHISPER_LANGUAGE) -> Dict:
+        """Convert voice to text"""
+        try:
+            self.load_model()
 
-        Args:
-            audio_path: Path to the audio file
-            language: Audio language (en, fa, ...)
+            result = self.model.transcribe(
+                audio_path,
+                language=language,
+                task="transcribe",
+                verbose=False,
+                word_timestamps=False
+            )
 
-        Returns:
-            Dictionary containing text and segments with timestamp
-        """
-        self.load_model()
+            return result
 
-        print(f"Start transcription: {audio_path}")
-
-        result = self.model.transcribe(
-            audio_path,
-            language=language,
-            task="transcribe",
-            verbose=False,
-            word_timestamps=False
-        )
-
-        print(f"Transcription completed: {len(result['segments'])} segments")
-
-        return result
+        except Exception as e:
+            raise TranscriptionError(f"Transcription failed with error: {e}")
 
     def get_segments(self, transcription_result: Dict) -> List[Dict]:
-        """
-        Extract segments with scheduling
-
-        Returns:
-            A list of dictionaries containing:
-            - text: text
-            - start: start time (seconds)
-            - end: end time (seconds)
-        """
+        """Extract segments with scheduling"""
         segments = []
 
         for segment in transcription_result['segments']:
