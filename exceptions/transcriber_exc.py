@@ -1,0 +1,2 @@
+class TranscriptionError(RuntimeError):
+    pass
