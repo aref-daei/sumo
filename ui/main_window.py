@@ -112,13 +112,12 @@ class MainWindow(ctk.CTk):
         self.translation_model = ctk.CTkOptionMenu(
             trans_frame,
             values=[
-                "Google Translate (googletrans)",
                 "M2M100 418M (m2m100_418M)",
                 "M2M100 1.2B (m2m100_1.2B)"
             ],
             width=250
         )
-        self.translation_model.set("Google Translate (googletrans)")
+        self.translation_model.set("M2M100 418M (m2m100_418M)")
         self.translation_model.pack(side="right", padx=10)
 
         # Checkboxes
