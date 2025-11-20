@@ -18,12 +18,9 @@ WHISPER_DEVICE = "cpu"  # or "cuda" for GPU
 WHISPER_LANGUAGE = "en"
 
 # Translate settings
-TRANSLATION_MODEL = "Helsinki-NLP/opus-mt-en-fa"
-# or "facebook/m2m100_418M" for quality better
+TRANSLATION_MODEL = "facebook/m2m100_418M"
 MAX_TRANSLATION_LENGTH = 512
 BATCH_SIZE = 8
-TRANSLATION_CHUNK_SIZE = 500  # تعداد کاراکتر در هر درخواست
-TRANSLATION_DELAY = 0.5  # تاخیر بین درخواست‌ها (ثانیه)
 
 # ffmpeg settings
 AUDIO_FORMAT = "wav"
@@ -34,13 +31,6 @@ AUDIO_RATE = 16000
 SRT_ENCODING = "utf-8"
 MAX_SUBTITLE_LENGTH = 42  # Maximum character in a line
 
-DIRS = [
-    TEMP_DIR,
-    OUTPUT_DIR,
-    OUTPUT_DIR / "subtitles",
-    OUTPUT_DIR / "videos",
-]
-
 # Create directories
-for directory in DIRS:
-    directory.mkdir(parents=True, exist_ok=True)
+OUTPUT_DIR.mkdir(exist_ok=True)
+TEMP_DIR.mkdir(exist_ok=True)
