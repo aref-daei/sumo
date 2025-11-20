@@ -1,0 +1,2 @@
+class UnsupportedModelError(RuntimeError):
+    pass
