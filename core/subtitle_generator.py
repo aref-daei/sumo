@@ -26,16 +26,9 @@ class SubtitleGenerator:
         return f"{hours:02d}:{minutes:02d}:{secs:02d},{millis:03d}"
 
     def generate_srt(self, segments: List[Dict], output_path: str) -> str:
-        """
-        Generate SRT file
+        """Generate SRT file"""
+        rtl, end = "\u202B", "\u202C"
 
-        Args:
-            segments: list of segments with text, start, end
-            output_path: output file path
-
-        Returns:
-            path to generated file
-        """
         srt_content = []
 
         for i, segment in enumerate(segments, start=1):
@@ -48,7 +41,7 @@ class SubtitleGenerator:
             srt_content.append(f"{start_time} --> {end_time}")
 
             # Text
-            srt_content.append(segment['text'])
+            srt_content.append(f"{rtl}{segment['text']}{end}")
 
             # Blank line between subtitles
             srt_content.append("")
@@ -66,17 +59,9 @@ class SubtitleGenerator:
     def create_bilingual_srt(self, segments_en: List[Dict],
                              segments_fa: List[Dict],
                              output_path: str) -> str:
-        """
-        Generate bilingual SRT file (English + Persian)
+        """Generate bilingual SRT file (English + Persian)"""
+        rtl, end = "\u202B", "\u202C"
 
-        Args:
-            segments_en: English segments
-            segments_fa: Persian segments
-            output_path: output file path
-
-        Returns:
-            path to generated file
-        """
         srt_content = []
 
         for i, (seg_en, seg_fa) in enumerate(zip(segments_en, segments_fa), start=1):
@@ -88,7 +73,7 @@ class SubtitleGenerator:
 
             # Display two languages
             srt_content.append(seg_en['text'])
-            srt_content.append(seg_fa['text'])
+            srt_content.append(f"{rtl}{seg_fa['text']}{end}")
             srt_content.append("")
 
         output_path = Path(output_path)
